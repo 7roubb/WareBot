@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/productdb?authSource=admin
+minio:
+  bucket: images
+  endpoint: http://localhost:9000
+  access-key: admin
+  secret-key: admin123
