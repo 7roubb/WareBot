@@ -53,5 +53,16 @@ public class CustomExceptions {
             super(message);
         }
     }
+    public static class ShelfNotFoundException extends RuntimeException {
+        public ShelfNotFoundException(String id) {
+            super(id);
+        }
+    }
+
+    public static class ShelfAlreadyExistsException extends RuntimeException {
+        public ShelfAlreadyExistsException(String message) {
+            super(message);
+        }
+    }
 
 }
