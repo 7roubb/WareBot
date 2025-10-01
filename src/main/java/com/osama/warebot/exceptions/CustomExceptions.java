@@ -64,5 +64,22 @@ public class CustomExceptions {
             super(message);
         }
     }
+    public static class RobotNotFoundException extends RuntimeException {
+        public RobotNotFoundException() {
+            super();
+        }
+    }
+
+    public static class RobotBusyException extends RuntimeException {
+        public RobotBusyException(String id) {
+            super(id);
+        }
+    }
+
+    public static class RobotUnavailableException extends RuntimeException {
+        public RobotUnavailableException(String id) {
+            super(id);
+        }
+    }
 
 }
