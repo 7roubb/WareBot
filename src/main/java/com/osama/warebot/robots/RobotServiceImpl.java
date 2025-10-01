@@ -36,7 +36,7 @@ public class RobotServiceImpl implements RobotService {
     public Boolean saveRobot(RobotRequestDto requestDto) {
         robotRepository.findByNameIgnoreCaseAndDeletedFalse(requestDto.getName())
                 .ifPresent(r -> {
-                    throw new CustomExceptions.RobotNotFoundException();
+                    throw new CustomExceptions.RobotAlreadyExistsException();
                 });
 
         Robot robot = RobotMapper.toRobot(requestDto);
@@ -54,6 +54,15 @@ public class RobotServiceImpl implements RobotService {
     public Boolean updateRobot(RobotRequestDto requestDto) {
         return robotRepository.findByIdAndDeletedFalse(requestDto.getId())
                 .map(robot -> {
+
+                    // Check for robot busy/unavailable status before updates
+                    if (robot.getStatus() == RobotStatus.BUSY) {
+                        throw new CustomExceptions.RobotBusyException(robot.getId());
+                    }
+                    if (robot.getStatus() == RobotStatus.MAINTENANCE) {
+                        throw new CustomExceptions.RobotUnavailableException(robot.getId());
+                    }
+
                     Optional.ofNullable(requestDto.getName()).ifPresent(robot::setName);
                     Optional.ofNullable(requestDto.getAvailable()).ifPresent(robot::setAvailable);
                     Optional.ofNullable(requestDto.getStatus()).ifPresent(robot::setStatus);
@@ -72,6 +81,15 @@ public class RobotServiceImpl implements RobotService {
     public Boolean deleteRobot(String id) {
         return robotRepository.findByIdAndDeletedFalse(id)
                 .map(robot -> {
+
+                    // Cannot delete busy or maintenance robots
+                    if (robot.getStatus() == RobotStatus.BUSY) {
+                        throw new CustomExceptions.RobotBusyException(robot.getId());
+                    }
+                    if (robot.getStatus() == RobotStatus.MAINTENANCE) {
+                        throw new CustomExceptions.RobotUnavailableException(robot.getId());
+                    }
+
                     robot.setDeleted(true);
                     robot.setUpdatedAt(Instant.now());
                     robotRepository.save(robot);

@@ -13,7 +13,7 @@ public class RobotResponseDto {
     private String id;
     private String name;
     private boolean available;
-    private String status;
+    private RobotStatus status;
     private String currentShelfId;
     private Instant createdAt;
     private Instant updatedAt;

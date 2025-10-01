@@ -19,8 +19,8 @@ public class RobotRequestDto {
 
     private Boolean available;
 
-    @NotBlank(groups = OnCreate.class, message = "{robot.status.required}")
-    private String status; // idle, busy, maintenance
+    @NotNull(groups = OnCreate.class, message = "{robot.status.required}")
+    private RobotStatus status; // enum
 
     private String currentShelfId;
 }

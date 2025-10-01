@@ -23,7 +23,7 @@ public class Robot {
 
     private boolean available; // true if robot can be assigned
 
-    private String status; // "idle", "busy", "maintenance"
+    private RobotStatus status; // enum now
 
     private String currentShelfId; // shelf robot is currently assigned to (optional)
 

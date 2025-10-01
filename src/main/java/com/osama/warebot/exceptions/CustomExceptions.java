@@ -81,5 +81,10 @@ public class CustomExceptions {
             super(id);
         }
     }
+    public static class RobotAlreadyExistsException extends RuntimeException {
+        public RobotAlreadyExistsException() {
+            super();
+        }
+    }
 
 }
