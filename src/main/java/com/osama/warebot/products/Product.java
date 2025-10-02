@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 @Document(value = "product")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,6 +43,9 @@ public class Product {
     private boolean onSale;
     private Instant saleStart;
     private Instant saleEnd;
+
+    // Many-to-Many: Product can be stored in multiple shelves
+    private List<String> shelfIds;  // Store Shelf IDs here
 
     @CreatedDate
     private Instant createdAt;

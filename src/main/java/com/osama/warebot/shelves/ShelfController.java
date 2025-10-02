@@ -52,6 +52,22 @@ public class ShelfController {
         return ApiResponse.success(result, HttpStatus.OK, getMessage("shelf.delete.success", id));
     }
 
+    @PostMapping("/{shelfId}/products/{productId}")
+    public ApiResponse<Boolean> addProductToShelf(@PathVariable String shelfId,
+                                                  @PathVariable String productId) {
+        Boolean result = shelfService.addProductToShelf(shelfId, productId);
+        return ApiResponse.success(result, HttpStatus.OK,
+                getMessage("shelf.add.product.success", productId, shelfId));
+    }
+
+    @DeleteMapping("/{shelfId}/products/{productId}")
+    public ApiResponse<Boolean> removeProductFromShelf(@PathVariable String shelfId,
+                                                       @PathVariable String productId) {
+        Boolean result = shelfService.removeProductFromShelf(shelfId, productId);
+        return ApiResponse.success(result, HttpStatus.OK,
+                getMessage("shelf.remove.product.success", productId, shelfId));
+    }
+
     private String getMessage(String code, String... args) {
         return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
     }

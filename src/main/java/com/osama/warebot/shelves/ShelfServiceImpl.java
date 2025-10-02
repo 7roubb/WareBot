@@ -1,6 +1,8 @@
 package com.osama.warebot.shelves;
 
 import com.osama.warebot.exceptions.CustomExceptions;
+import com.osama.warebot.products.Product;
+import com.osama.warebot.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class ShelfServiceImpl implements ShelfService {
 
     private final ShelfRepository shelfRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public Page<ShelfResponseDto> findAll(Pageable pageable) {
@@ -98,5 +101,60 @@ public class ShelfServiceImpl implements ShelfService {
                     log.error("Cannot delete. Shelf not found with ID: {}", id);
                     return new CustomExceptions.ShelfNotFoundException(id);
                 });
+    }@Override
+    @Transactional
+    public Boolean addProductToShelf(String shelfId, String productId) {
+        log.debug("Adding product {} to shelf {}", productId, shelfId);
+
+        Shelf shelf = shelfRepository.findByIdAndDeletedFalse(shelfId)
+                .orElseThrow(() -> new CustomExceptions.ShelfNotFoundException(shelfId));
+
+        Product product = productRepository.findByIdAndDeletedFalse(productId)
+                .orElseThrow(() -> new CustomExceptions.ProductNotFoundException(productId));
+
+        Optional.ofNullable(shelf.getProductIds())
+                .filter(list -> !list.contains(productId))
+                .ifPresent(list -> list.add(productId));
+
+        Optional.ofNullable(product.getShelfIds())
+                .filter(list -> !list.contains(shelfId))
+                .ifPresent(list -> list.add(shelfId));
+
+        shelf.setUpdatedAt(Instant.now());
+        product.setUpdatedAt(Instant.now());
+
+        shelfRepository.save(shelf);
+        productRepository.save(product);
+
+        log.info("Product {} successfully added to shelf {}", productId, shelfId);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean removeProductFromShelf(String shelfId, String productId) {
+        log.debug("Removing product {} from shelf {}", productId, shelfId);
+
+        Shelf shelf = shelfRepository.findByIdAndDeletedFalse(shelfId)
+                .orElseThrow(() -> new CustomExceptions.ShelfNotFoundException(shelfId));
+
+        Product product = productRepository.findByIdAndDeletedFalse(productId)
+                .orElseThrow(() -> new CustomExceptions.ProductNotFoundException(productId));
+
+        Optional.ofNullable(shelf.getProductIds())
+                .ifPresent(list -> list.remove(productId));
+
+        Optional.ofNullable(product.getShelfIds())
+                .ifPresent(list -> list.remove(shelfId));
+
+        shelf.setUpdatedAt(Instant.now());
+        product.setUpdatedAt(Instant.now());
+
+        shelfRepository.save(shelf);
+        productRepository.save(product);
+
+        log.info("Product {} successfully removed from shelf {}", productId, shelfId);
+        return true;
     }
 }
+

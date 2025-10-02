@@ -14,4 +14,8 @@ public interface ShelfService {
     Boolean updateShelf(ShelfRequestDto shelfRequestDto);
 
     Boolean deleteShelf(String id);
+
+    Boolean addProductToShelf(String shelfId, String productId);
+
+    Boolean removeProductFromShelf(String shelfId, String productId);
 }
