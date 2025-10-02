@@ -1,4 +1,6 @@
 spring:
+  elasticsearch:
+    uris: http://localhost:9200
   data:
     mongodb:
       uri: mongodb://root:root@localhost:27017/productdb?authSource=admin

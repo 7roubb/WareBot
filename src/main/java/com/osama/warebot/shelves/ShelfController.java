@@ -3,6 +3,8 @@ package com.osama.warebot.shelves;
 import com.osama.warebot.common.ApiResponse;
 import com.osama.warebot.common.OnCreate;
 import com.osama.warebot.common.OnUpdate;
+import com.osama.warebot.products.ProductIndex;
+import com.osama.warebot.products.ProductSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/shelves")
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class ShelfController {
 
     private final ShelfService shelfService;
     private final MessageSource messageSource;
+    private final ProductSearchService productSearchService;
 
     @GetMapping
     public ApiResponse<Page<ShelfResponseDto>> getAllShelves(Pageable pageable) {
@@ -67,6 +72,16 @@ public class ShelfController {
         return ApiResponse.success(result, HttpStatus.OK,
                 getMessage("shelf.remove.product.success", productId, shelfId));
     }
+    @GetMapping("/{shelfId}/products/search")
+    public ApiResponse<List<ProductIndex>> searchProductsInShelf(
+            @PathVariable String shelfId,
+            @RequestParam String keyword) {
+
+        List<ProductIndex> products = productSearchService.searchProductsInShelf(shelfId, keyword);
+        return ApiResponse.success(products, HttpStatus.OK,
+                getMessage("shelf.search.products.success", shelfId));
+    }
+
 
     private String getMessage(String code, String... args) {
         return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
