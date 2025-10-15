@@ -17,4 +17,10 @@ public interface RobotRepository extends MongoRepository<Robot, String> {
     Optional<Robot> findByNameIgnoreCaseAndDeletedFalse(String name);
 
     Optional<Robot> findById(String id);
+
+    long countByDeletedFalse();
+
+    long countByDeletedFalseAndStatus(RobotStatus status);
+
+
 }

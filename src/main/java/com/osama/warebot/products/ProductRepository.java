@@ -16,4 +16,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     Optional<Product> findByNameIgnoreCaseAndDeletedFalse(String name);
 
     Optional<Product> findById(String id);
+
+    long countByDeletedFalse();
+
 }

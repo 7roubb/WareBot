@@ -19,4 +19,6 @@ public interface ShelfRepository extends MongoRepository<Shelf, String> {
     );
 
     Optional<Shelf> findById(String id);
+    long countByDeletedFalse();
+
 }
