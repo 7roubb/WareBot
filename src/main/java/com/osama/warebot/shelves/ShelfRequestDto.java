@@ -26,11 +26,11 @@ public class ShelfRequestDto {
 
     @NotNull(groups = OnCreate.class, message = "{shelf.xCoord.required}")
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "{shelf.xCoord.min}")
-    private Integer xCoord;
+    private int xCoord;
 
     @NotNull(groups = OnCreate.class, message = "{shelf.yCoord.required}")
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "{shelf.yCoord.min}")
-    private Integer yCoord;
+    private int yCoord;
 
     @Min(value = 0, groups = {OnCreate.class, OnUpdate.class}, message = "{shelf.level.min}")
     private Integer level;
@@ -40,7 +40,6 @@ public class ShelfRequestDto {
 
     private Boolean available;
 
-    // List of product IDs stored on the shelf
-    @NotEmpty(groups = OnCreate.class, message = "{shelf.products.required}")
+
     private List<@NotBlank(message = "{product.id.notblank}") String> productIds;
 }

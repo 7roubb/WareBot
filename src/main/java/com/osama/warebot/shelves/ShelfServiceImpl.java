@@ -38,16 +38,13 @@ public class ShelfServiceImpl implements ShelfService {
     @Transactional
     public Boolean saveShelf(ShelfRequestDto shelfRequestDto) {
         // Optional: check if a shelf already exists at the same coordinates
-        shelfRepository.findByWarehouseIdAndXCoordAndYCoordAndLevelAndDeletedFalse(
+        shelfRepository.findExistingShelf(
                 shelfRequestDto.getWarehouseId(),
                 shelfRequestDto.getXCoord(),
                 shelfRequestDto.getYCoord(),
                 shelfRequestDto.getLevel() != null ? shelfRequestDto.getLevel() : 0
-        ).ifPresent(s -> {
-            throw new CustomExceptions.ShelfAlreadyExistsException(
-                    "Shelf already exists at the specified coordinates"
-            );
-        });
+        );
+
 
         Shelf shelf = ShelfMapper.toShelf(shelfRequestDto);
         shelf.setCreatedAt(Instant.now());
