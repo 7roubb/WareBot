@@ -98,4 +98,15 @@ public class RobotServiceImpl implements RobotService {
                 })
                 .orElseThrow(CustomExceptions.RobotNotFoundException::new);
     }
+    @Override
+    public Page<RobotResponseDto> findByStatus(RobotStatus status, Pageable pageable) {
+        return robotRepository.findByStatusAndDeletedFalse(status, pageable)
+                .map(RobotMapper::toResponseDto);
+    }
+
+    @Override
+    public Page<RobotResponseDto> findByAvailable(boolean available, Pageable pageable) {
+        return robotRepository.findByAvailableAndDeletedFalse(available, pageable)
+                .map(RobotMapper::toResponseDto);
+    }
 }

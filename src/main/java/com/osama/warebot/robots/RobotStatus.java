@@ -5,4 +5,5 @@ public enum RobotStatus {
     BUSY,
     MAINTENANCE,
     CHARGING,
+    OFFLINE
 }

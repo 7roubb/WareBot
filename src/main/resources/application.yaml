@@ -1,11 +1,29 @@
 spring:
+  server:
+    port: 8082
   elasticsearch:
     uris: http://localhost:9200
   data:
     mongodb:
       uri: mongodb://root:root@localhost:27017/productdb?authSource=admin
+  mqtt:
+    broker-url: tcp://localhost:1883
+
 minio:
   bucket: images
   endpoint: http://localhost:9000
   access-key: admin
   secret-key: admin123
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,metrics,info
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true

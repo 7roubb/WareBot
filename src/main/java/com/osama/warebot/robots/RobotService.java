@@ -14,4 +14,7 @@ public interface RobotService {
     Boolean updateRobot(RobotRequestDto robotRequestDto);
 
     Boolean deleteRobot(String id);
+
+    Page<RobotResponseDto> findByStatus(RobotStatus status, Pageable pageable);
+    Page<RobotResponseDto> findByAvailable(boolean available, Pageable pageable);
 }
